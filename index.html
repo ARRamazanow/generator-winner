@@ -7,13 +7,19 @@
     <title>Document</title>
 </head>
 <body>
- <h1>🎉 Генератор имён победителей 🎉</h1>
-  <button onclick="generateWinner()">Выбрать победителя</button>
-  
+  <h1>🎰 Рулетка Победителя 🎰</h1>
+
+  <div class="roulette-container">
+    <div class="roulette" id="roulette"></div>
+    <div class="selector"></div>
+  </div>
+
+  <button onclick="startSpin()">Крутить рулетку</button>
+
   <div id="winner">Имя появится здесь</div>
-    <div id="fireworks-container"></div>
+
+  <div id="fireworks-container"></div>
 
   <script src="main.js"></script>
 </body>
 </html>
-
