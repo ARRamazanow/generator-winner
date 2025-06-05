@@ -1,15 +1,18 @@
-const names = [
-  "HRDC", "Babymain", "Falos", "1666sikna", "aasstau",
-  "katu", "spaudikas", "kilimaz", "csmaster", "katukavakare",
-  "bbd", "cbb", "aiktu", "kay", "names"
-];
+
+const spinSound = new Audio("sound/spinner.mp3");
+const fireworksSound = new Audio("sound/fire.mp3");
+
+
+
+let names = JSON.parse(localStorage.getItem("winner-names")) || [];
+
 
 const roulette = document.getElementById('roulette');
 const winnerDisplay = document.getElementById('winner');
 
 function populateRoulette() {
   roulette.innerHTML = '';
-  const extended = [...names, ...names, ...names];
+  const extended = [...names];
   extended.forEach(name => {
     const item = document.createElement('div');
     item.className = 'name-item';
@@ -20,7 +23,13 @@ function populateRoulette() {
 
 populateRoulette();
 
+let isSpinning = false;
+
 function startSpin() {
+  if (isSpinning) return;
+  isSpinning = true;
+spinSound.currentTime = 4;
+spinSound.play();
       // Сброс позиции и анимации
   roulette.style.transition = 'none';
   roulette.style.left = '0px';
@@ -40,6 +49,7 @@ function startSpin() {
   roulette.style.left = `-${offset - middleIndex * itemWidth}px`;
 
   setTimeout(() => {
+    
     // Определяем элемент под красной стрелкой
     const selector = document.querySelector('.selector');
     const selectorX = selector.getBoundingClientRect().left + selector.offsetWidth / 2;
@@ -52,9 +62,14 @@ function startSpin() {
 
     const name = winnerItem ? winnerItem.textContent : 'Не найден';
     winnerDisplay.textContent = `🏆 Победитель: ${name} 🏆`;
+
     launchFireworks();
+    fireworksSound.currentTime = 0;
+fireworksSound.play();
+  isSpinning = false;
   }, spinTime);
 }
+
 
 // Фейерверк
 function launchFireworks() {
@@ -93,5 +108,71 @@ document.addEventListener("keydown", (e) => {
   if (e.code === "Space") {
     e.preventDefault(); // чтобы страница не прокручивалась
     startSpin();
+  }
+});
+
+function updateNameListUI() {
+  const nameList = document.getElementById("name-list");
+  nameList.innerHTML = "";
+
+  names.forEach((name, index) => {
+    const li = document.createElement("li");
+    li.textContent = name;
+
+    const delBtn = document.createElement("button");
+    delBtn.textContent = "Удалить";
+    delBtn.addEventListener("click", () => {
+      names.splice(index, 1);
+      saveNames();
+      updateNameListUI();
+      populateRoulette();
+    });
+
+    li.appendChild(delBtn);
+    nameList.appendChild(li);
+  });
+}
+
+function saveNames() {
+  localStorage.setItem("winner-names", JSON.stringify(names));
+}
+
+document.getElementById("add-name-btn").addEventListener("click", () => {
+  const input = document.getElementById("new-name");
+  const newName = input.value.trim();
+  if (newName) {
+    names.push(newName);
+    input.value = "";
+    saveNames();
+    updateNameListUI();
+    populateRoulette();
+  }
+});
+
+// при старте
+updateNameListUI();
+
+
+function toggleEditor() {
+  const editor = document.getElementById("editor");
+  if (editor.style.display === "none") {
+    editor.style.display = "block";
+  } else {
+    editor.style.display = "none";
+  }
+}
+
+const toggleBtn = document.getElementById("toggle-editor-btn");
+
+toggleBtn.addEventListener("click", () => {
+  const editor = document.getElementById("name-editor");
+  if (!editor) return;
+
+  if (editor.style.display === "none") {
+    editor.style.display = "block";
+    toggleBtn.textContent = "Свернуть редактор";
+  } else {
+    editor.style.display = "none";
+    toggleBtn.textContent = "Развернуть редактор";
   }
 });
