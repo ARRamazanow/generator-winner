@@ -1,6 +1,6 @@
 body {
   font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(135deg, #f0f4f8, #d9e2ec);
+  background: linear-gradient(145deg, #b8f8ff, #ff97e8);
   text-align: center;
   padding-top: 60px;
 }
@@ -37,7 +37,7 @@ button:hover {
   background: white;
 }
 
-.roulette {
+#roulette {
   display: flex;
   position: relative;
   left: 0;
@@ -58,13 +58,14 @@ button:hover {
 }
 
 .selector {
-  position: absolute;
+    position: absolute;
   top: 0;
-  left: 500%;
-  transform: translateX(-50%);
+  bottom: 0;
   width: 4px;
-  height: 100%;
-  background: rgb(241, 17, 148);
+  background: rgba(224, 25, 102, 0.527);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
 }
 
 #winner {
@@ -89,11 +90,11 @@ button:hover {
 
 .firework {
   position: absolute;
-  width: 6px;
-  height: 6px;
+  width: 30px;
+  height: 30px;
   background: white;
   border-radius: 50%;
-  animation: explode 5s ease-out forwards;
+  animation: explode 8s ease-out forwards;
   opacity: 0;
 }
 
